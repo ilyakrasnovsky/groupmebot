@@ -33,11 +33,8 @@ functions:
 class Dbmgr():
     def __init__(self):
         #Authentication 
-        #FIREBASE_URL = settings.FIREBASE_URL
-        #FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY
-        FIREBASE_URL = "https://groupmebot-4104f.firebaseio.com/"
-        FIREBASE_KEY = "uoGyNEpo6vQAnvwVF9jK7Z6chSAKR0wSohOcKQhf"
-        
+        FIREBASE_URL = settings.FIREBASE_URL
+        FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY
         authentication = firebase.FirebaseAuthentication(FIREBASE_KEY, 'ilyakrasnovsky@gmail.com', admin = True)
         self.fdb = firebase.FirebaseApplication(FIREBASE_URL, authentication=authentication)
 
