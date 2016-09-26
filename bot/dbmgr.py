@@ -9,6 +9,8 @@ from firebase import firebase
 from requests import HTTPError
 from django.conf import settings
 
+#import localcreds
+
 '''
 class: Dbmgr
 
@@ -33,8 +35,8 @@ functions:
 class Dbmgr():
     def __init__(self):
         #Authentication 
-        FIREBASE_URL = settings.FIREBASE_URL
-        FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY
+        FIREBASE_URL = settings.FIREBASE_URL #"https://groupmebot-4104f.firebaseio.com/" 
+        FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY #localcreds.get_credentials(firebase=True) 
         authentication = firebase.FirebaseAuthentication(FIREBASE_KEY, 'ilyakrasnovsky@gmail.com', admin = True)
         self.fdb = firebase.FirebaseApplication(FIREBASE_URL, authentication=authentication)
 
