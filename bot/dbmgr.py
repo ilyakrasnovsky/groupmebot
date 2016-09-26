@@ -9,7 +9,7 @@ from firebase import firebase
 from requests import HTTPError
 from django.conf import settings
 
-#import localcreds
+import localcreds
 
 '''
 class: Dbmgr
@@ -28,15 +28,19 @@ functions:
     getUser()
     removeUser()
     addMessage()
-    getMessage()
-    removeMessage()
+    addBot()
+    getBot()
+    removeBot()
 '''
 
 class Dbmgr():
     def __init__(self):
         #Authentication 
-        FIREBASE_URL = settings.FIREBASE_URL #"https://groupmebot-4104f.firebaseio.com/" 
-        FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY #localcreds.get_credentials(firebase=True) 
+        #FIREBASE_URL = settings.FIREBASE_URL # 
+        #FIREBASE_KEY = settings.GROUPMEBOT_FIREBASE_SECRET_KEY #localcreds.get_credentials(firebase=True) 
+        FIREBASE_URL = "https://groupmebot-4104f.firebaseio.com/" 
+        FIREBASE_KEY = localcreds.get_credentials(firebase=True) 
+        
         authentication = firebase.FirebaseAuthentication(FIREBASE_KEY, 'ilyakrasnovsky@gmail.com', admin = True)
         self.fdb = firebase.FirebaseApplication(FIREBASE_URL, authentication=authentication)
 
@@ -132,7 +136,6 @@ class Dbmgr():
 
     outputs:
         status : True if addition was successful,
-                False if name of word already taken,
                 "ERROR" (string) in the case of connection
                 issue or authentication problem.
     '''
@@ -155,48 +158,24 @@ class Dbmgr():
                 return True
 
     '''
-    function: getCrassWord()
+    function: addBot()
 
     description:
-        -Searches for a crass word in the database from a name,
-        DEFAULT gets all crasswords
+        -Adds a bot to the database
 
     inputs: 
-        word : name (string) of crassword to look for (optional, if None,
-            returns all crasswords)
+        botname : name (string) of bot to add
+        botid : the bot id (string from groupme) of bot to add
 
     outputs:
-         If found, returns the crassword
-         (or dictionary of many crasswords by name
-            if name was None, None if not found, and "ERROR" if 
-                connection/authentication issue)
+        True if successful, False if bot name already taken,
+        and "ERROR" if connection/authentication issue)
     '''
-    def getCrassWord(self, word=None):
-        try:
-            return self.fdb.get('/crasswords/', word)
-        except HTTPError:
-            return "ERROR"
-
-    '''
-    function: removeCrassWord()
-
-    description:
-        -Removes a crassword from the database by name
-
-    inputs: 
-        word : name (string) of crassword to delete
-        
-    outputs:
-        status : True if delete was successful,
-                False if selected crassword not in database,
-                "ERROR" (string) in the case of connection
-                issue or authentication problem.
-    '''
-    def removeCrassWord(self, word):
-        isPresent = self.getCrassWord(word)
-        if (isPresent != None):
+    def addBot(self, botname, botid):
+        isPresent = self.getBot(botname)
+        if (isPresent == None):
             try:
-                self.fdb.delete('/crasswords/', word)
+                self.fdb.put('/bots/', botname, {"id" : botid})
                 return True
             except HTTPError:
                 return "ERROR"
@@ -204,7 +183,56 @@ class Dbmgr():
             return "ERROR"
         else:
             return False
-    
+
+    '''
+    function: getBot()
+
+    description:
+        -retrieves bot information from database by name
+
+    inputs: 
+        botname : name (string) of bot to retrieve, if None, returns dict
+        of all bots in database
+        
+    outputs:
+        status : dict of bot info (or dict of such dicts if botname == None),
+                "ERROR" (string) in the case of connection
+                issue or authentication problem.
+    '''
+    def getBot(self, botname=None):
+        try:
+            return self.fdb.get('/bots/', botname)
+        except HTTPError:
+            return "ERROR"
+
+    '''
+        function: removeBot()
+
+        description:
+            -Removes a bot from the database by name
+
+        inputs: 
+            botname : name (string) of bot to delete
+            
+        outputs:
+            status : True if delete was successful,
+                    False if selected bot not in database,
+                    "ERROR" (string) in the case of connection
+                    issue or authentication problem.
+    '''
+    def removeBot(self, botname):
+        isPresent = self.getBot(botname)
+        if (isPresent != None):
+            try:
+                self.fdb.delete('/bots/', botname)
+                return True
+            except HTTPError:
+                return "ERROR"
+        elif (isPresent == "ERROR"):
+            return "ERROR"
+        else:
+            return False
+   
 #Tester client
 def main():
     dbmgr1 = Dbmgr()
@@ -237,14 +265,28 @@ def main():
     print ("dbmgr1.getUser(ilya) status : " + str(status))
 
     status = dbmgr1.addMessage("dorothy", "hi")
-    print ("dbmgr1.getUser(dorothy, hi) status : " + str(status))
+    print ("dbmgr1.addMessage(dorothy, hi) status : " + str(status))
 
     status = dbmgr1.addMessage("dorothy", "hi")
-    print ("dbmgr1.getUser(dorothy, hi) status : " + str(status))
+    print ("dbmgr1.addMessage(dorothy, hi) status : " + str(status))
 
     status = dbmgr1.addMessage("lol", "hi")
-    print ("dbmgr1.getUser(lol, hi) status : " + str(status))
+    print ("dbmgr1.addMessage(lol, hi) status : " + str(status))
 
+    status = dbmgr1.addMessage("ilya", "i'm added via addMessage!")
+    print ("dbmgr1.addMessage(ilya, i'm added via addMessage!) status : " + str(status))
+
+    status = dbmgr1.getBot("ilyasbot")
+    print ("dbmgr1.getBot(ilyasbot) status : " + str(status))
+
+    status = dbmgr1.addBot("ilyasbot", "lololol")
+    print ("dbmgr1.addBot(ilyasbot, lololol)" + str(status))
+
+    status = dbmgr1.getBot("ilyasbot")
+    print ("dbmgr1.getBot(ilyasbot) status : " + str(status))
+
+    status = dbmgr1.removeBot("ilyasbot")
+    print ("dbmgr1.removeBot(ilyasbot) status : " + str(status))    
 
 if __name__ == '__main__':
     main()
