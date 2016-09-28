@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http404
 #from django.views import View
-from django.views.decorators.csrf import ensure_csrf_cookie
+#from django.views.decorators.csrf import ensure_csrf_cookie
+from django.views.decorators.csrf import csrf_exempt
 
 def index(request):
 	return render(request, 'bot/home.html')
 
-@ensure_csrf_cookie
+@csrf_exempt
 def boobot(request):
 	context = {"data" : "meh"}
 	if (request.method == "POST"):
