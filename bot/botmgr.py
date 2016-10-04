@@ -35,7 +35,7 @@ class BotMgr():
     def __init__(self):
         self.db = dbmgr.Dbmgr()
         #self.groupMeKey = settings.GROUPMEBOT_GROUPME_SECRET_KEY
-        self.groupmeurl = 
+        self.groupmeurl = "fakeurl"
         self.groupMeKey = localcreds.get_credentials(groupme=True)
     '''
     function: registerBot()

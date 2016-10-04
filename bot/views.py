@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 #from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
 import dbmgr
+import json
 
 def index(request):
 	return render(request, 'bot/home.html')
@@ -12,7 +13,11 @@ def index(request):
 def boobot(request):
 	dbmgr1 = dbmgr.Dbmgr()
 	if (request.method == "POST"):
-		dbmgr1.addMessage(request.body['name'], request.body['text'])
+		#dbmgr1.addMessage(request.body['name'], request.body['text'])
+		#print (json.loads(request.body))
+		#print (request.body)
+		#print (request.POST.dict())
+		dbmgr1.fdb.post("/lewl/", request.POST.dict())
 	return render(request, 'bot/home.html')
 
 '''
