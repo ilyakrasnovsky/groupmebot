@@ -13,11 +13,12 @@ def index(request):
 def boobot(request):
 	dbmgr1 = dbmgr.Dbmgr()
 	if (request.method == "POST"):
-		#dbmgr1.addMessage(request.body['name'], request.body['text'])
 		#print (json.loads(request.body))
+		jsondata = json.loads(request.body)
 		#print (request.body)
 		#print (request.POST.dict())
-		dbmgr1.fdb.post("/lewl/", request.POST.dict())
+		#dbmgr1.fdb.post("/lewl/", request.POST.dict())
+		dbmgr1.addMessage(jsondata['name'], jsondata['text'])
 	return render(request, 'bot/home.html')
 
 '''
