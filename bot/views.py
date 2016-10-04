@@ -10,6 +10,8 @@ def index(request):
 @csrf_exempt
 def boobot(request):
 	context = {"data" : "meh"}
+	print ("request.POST.dict() is : " + str(request.POST.dict()))
+	print (request.body())
 	if (request.method == "POST"):
 		context = request.POST.dict()
 	return JsonResponse(context)
