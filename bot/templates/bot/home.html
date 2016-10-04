@@ -15,7 +15,11 @@
 
 <body class="body">
 	<p>Welcome to Ilya's groupme Bot!</p>
-	
+	<ul>
+	{% for i in context %}
+	<li>{{ i }}</li>
+	{%endfor%}
+	</ul>
 </body>
 
 </html>
