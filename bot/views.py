@@ -3,18 +3,17 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 #from django.views import View
 #from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.decorators.csrf import csrf_exempt
+import dbmgr
 
 def index(request):
 	return render(request, 'bot/home.html')
 
 @csrf_exempt
 def boobot(request):
-	context = {"data" : "meh"}
-	print ("request.POST.dict() is : " + str(request.POST.dict()))
-	print (request.body())
+	dbmgr1 = dbmgr.Dbmgr()
 	if (request.method == "POST"):
-		context = request.POST.dict()
-	return JsonResponse(context)
+		dbmgr1.addMessage(request.body['name'], request.body['text'])
+	return render(request, 'bot/home.html')
 
 '''
 class: Bot
