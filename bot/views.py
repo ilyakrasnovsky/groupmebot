@@ -11,17 +11,9 @@ def index(request):
 @csrf_exempt
 def boobot(request):
 	dbmgr1 = dbmgr.Dbmgr()
-
-	#request.session['cool'] = {"context" : "wah"}
-	#print (request.body)
-	#print (request.session.get('cool'))
 	if (request.method == "POST"):
-		request.session['wah'] = {"context" : request.body}
-		dbmgr1.fdb.post('/lewl/', request.body)
-		#print ("this is a post request")
-		#print (request.body)
-	context = request.session.get('wah')
-	return render(request, 'bot/home.html', context)
+		dbmgr1.addMessage(request.body['name'], request.body['text'])
+	return render(request, 'bot/home.html')
 
 '''
 class: Bot
