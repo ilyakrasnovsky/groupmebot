@@ -5,21 +5,33 @@ from django.http import HttpResponse, HttpResponseRedirect, JsonResponse, Http40
 from django.views.decorators.csrf import csrf_exempt
 import dbmgr
 import json
+import requests
+from django.conf import settings
 
 def index(request):
-	return render(request, 'bot/home.html')
+    return render(request, 'bot/home.html')
 
 @csrf_exempt
 def boobot(request):
-	dbmgr1 = dbmgr.Dbmgr()
-	if (request.method == "POST"):
-		#print (json.loads(request.body))
-		jsondata = json.loads(request.body)
-		#print (request.body)
-		#print (request.POST.dict())
-		#dbmgr1.fdb.post("/lewl/", request.POST.dict())
-		dbmgr1.addMessage(jsondata['name'], jsondata['text'])
-	return render(request, 'bot/home.html')
+    dbmgr1 = dbmgr.Dbmgr()
+    if (request.method == "POST"):
+        #get the name and message
+        jsondata = json.loads(request.body)
+        #if message is not corrupted
+        if ('name' in jsondata and 'text' in jsondata):
+            #save this in firebase
+            dbmgr1.addMessage(jsondata['name'], jsondata['text'])
+            #have the bot respond, only if I spoke
+            #if (jsondata['name'] == "lewl"):
+            #botid = "6bae961d754f11ccd688753363" #wah bot
+            botid = "000ccdb6b4bd1320e186cdc10f" #fister roboto
+            postbody = {
+                    "bot_id"  : botid,
+                    "text"    : jsondata['text']
+                    }
+            for i in range(0,2):
+                requests.post(settings.GROUPME_URL, data=postbody)
+    return render(request, 'bot/home.html')
 
 '''
 class: Bot
@@ -35,9 +47,9 @@ initializer input:
     name, id
 
 functions:
-	get() - NOT USED
-	post()
-	perform()
+    get() - NOT USED
+    post()
+    perform()
 '''
 '''
 class Bot(View):
@@ -46,12 +58,12 @@ class Bot(View):
         self.botid = botid
 
     #def get(self, request):
-    #	return HttpResponse("lolget")
+    #   return HttpResponse("lolget")
 
-	def post(self, request):
-		self.perform()
-    	return HttpResponse("lolpost")
+    def post(self, request):
+        self.perform()
+        return HttpResponse("lolpost")
 
     def perform(self):
-    	print ("lol, i've performed")
+        print ("lol, i've performed")
 '''

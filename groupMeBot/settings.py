@@ -18,7 +18,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
 
 #DEPLOYMENT MODE : toggle LOCAL or REMOTE
-DEPLOY = 'LOCAL'
+DEPLOY = 'REMOTE'
 
 #Secret keys for heroku (deploy must be LOCAL or REMOTE)
 def SECRET_KEYS(deploy):
@@ -43,7 +43,7 @@ else:
     DEBUG = False
 
 FIREBASE_URL = "https://groupmebot-4104f.firebaseio.com/"
-GROUPME_URL = ""
+GROUPME_URL = "https://api.groupme.com/v3/bots/post"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
