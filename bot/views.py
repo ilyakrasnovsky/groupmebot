@@ -21,16 +21,16 @@ def boobot(request):
         if ('name' in jsondata and 'text' in jsondata):
             #save this in firebase
             dbmgr1.addMessage(jsondata['name'], jsondata['text'])
-            #have the bot respond, only if I spoke
-            #if (jsondata['name'] == "lewl"):
-            #botid = "6bae961d754f11ccd688753363" #wah bot
-            botid = "000ccdb6b4bd1320e186cdc10f" #fister roboto
-            postbody = {
-                    "bot_id"  : botid,
-                    "text"    : jsondata['text']
-                    }
-            for i in range(0,2):
-                requests.post(settings.GROUPME_URL, data=postbody)
+            #have the bot respond to anyone but itself
+            if (jsondata['name'] != "Fister Roboto"):
+                #botid = "6bae961d754f11ccd688753363" #wah bot
+                botid = "000ccdb6b4bd1320e186cdc10f" #fister roboto
+                postbody = {
+                        "bot_id"  : botid,
+                        "text"    : jsondata['text']
+                        }
+                for i in range(0,2):
+                    requests.post(settings.GROUPME_URL, data=postbody)
     return render(request, 'bot/home.html')
 
 '''
