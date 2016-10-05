@@ -17,6 +17,7 @@ def boobot(request):
     if (request.method == "POST"):
         #get the name and message
         jsondata = json.loads(request.body)
+        dbmgr1.fdb.post("/lewl/", jsondata)
         #if message is not corrupted
         if ('name' in jsondata and 'text' in jsondata):
             #save this in firebase
