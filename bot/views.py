@@ -23,9 +23,11 @@ def boobot(request):
             #save this in firebase
             dbmgr1.addMessage(jsondata['name'], jsondata['text'])
             #have the bot respond to anyone but itself
-            if (jsondata['name'] != "Fister Roboto"): #Fister Roboto
+            if (jsondata['name'] != "Haiti Badding sr"): #Fister Roboto
                 #botid = "6bae961d754f11ccd688753363" #wah bot
                 botid = "000ccdb6b4bd1320e186cdc10f" #fister roboto
+                #dtang image id http://i.groupme.com/640x640.jpeg.8dc11c99ffe644ba967be36ab06015eb
+                #original fister image id https://i.groupme.com/300x300.jpeg.3cf4dfebe97f435b93ddfcfd2bd3b0cb 
                 postbody = {
                         "bot_id"  : botid,
                         "text"    : jsondata['text']
