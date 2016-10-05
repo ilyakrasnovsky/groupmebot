@@ -29,9 +29,21 @@ def boobot(request):
                 postbody = {
                         "bot_id"  : botid,
                         "text"    : jsondata['text']
+                        
                         }
                 for i in range(0,2):
                     requests.post(settings.GROUPME_URL, data=postbody)
+                picpostbody = {
+                                "bot_id"  : botid,
+                                "text"    : jsondata['text'],
+                                "attachments" : [
+                                    {
+                                        "type" : "image",
+                                        "url" : "https://i.groupme.com/640x565.jpeg.191025e8b2b045309cf1c2ed22fb5135"
+                                    }
+                                ]
+                            }
+                request.post(settings.GROUPME_URL, data=picpostbody)
     return render(request, 'bot/home.html')
 
 '''
