@@ -17,22 +17,22 @@ def boobot(request):
     if (request.method == "POST"):
         #get the name and message
         jsondata = json.loads(request.body)
-        dbmgr1.fdb.post("/lewl/", jsondata)
+        #dbmgr1.fdb.post("/lewl/", jsondata)
         #if message is not corrupted
         if ('name' in jsondata and 'text' in jsondata):
             #save this in firebase
             dbmgr1.addMessage(jsondata['name'], jsondata['text'])
             #have the bot respond to anyone but itself
-            if (jsondata['name'] != "Fister Roboto"):
-                #botid = "6bae961d754f11ccd688753363" #wah bot
-                botid = "000ccdb6b4bd1320e186cdc10f" #fister roboto
+            if (jsondata['name'] != "wah"): #Fister Roboto
+                botid = "6bae961d754f11ccd688753363" #wah bot
+                #botid = "000ccdb6b4bd1320e186cdc10f" #fister roboto
                 postbody = {
                         "bot_id"  : botid,
                         "text"    : jsondata['text']
-                        
                         }
                 for i in range(0,2):
                     requests.post(settings.GROUPME_URL, data=postbody)
+                '''
                 picpostbody = {
                                 "bot_id"  : botid,
                                 "text"    : jsondata['text'],
@@ -43,7 +43,8 @@ def boobot(request):
                                     }
                                 ]
                             }
-                request.post(settings.GROUPME_URL, data=picpostbody)
+                requests.post(settings.GROUPME_URL, data=picpostbody)
+                '''
     return render(request, 'bot/home.html')
 
 '''
